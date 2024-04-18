@@ -46,9 +46,9 @@
     <SOAP-ENV:Body>
         <ns2:getStudentResponse xmlns:ns2="http://superdev.io/student-service">
             <ns2:student>
-                <ns2:grade>3</ns2:grade>
-                <ns2:id>88</ns2:id>
-                <ns2:studentNumber>S88</ns2:studentNumber>
+                <ns2:grade>1</ns2:grade>
+                <ns2:id>1</ns2:id>
+                <ns2:studentNumber>S1</ns2:studentNumber>
             </ns2:student>
         </ns2:getStudentResponse>
     </SOAP-ENV:Body>

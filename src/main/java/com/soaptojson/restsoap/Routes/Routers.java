@@ -19,7 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soaptojson.restsoap.Convert.JsonProcess;
 import com.soaptojson.restsoap.Convert.XmlProcessor;
 
-@Component
+//@Component
 public class Routers  extends RouteBuilder
 {
     

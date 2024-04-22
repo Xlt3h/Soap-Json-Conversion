@@ -5,7 +5,10 @@ import org.apache.camel.ConsumerTemplate;
 import org.apache.camel.ProducerTemplate;
 
 import com.soaptojson.restsoap.Convert.JsonProcess;
+import com.soaptojson.restsoap.Convert.JsonProcessorConverterXml;
+import com.soaptojson.restsoap.Convert.JsonProcessorMapper;
 import com.soaptojson.restsoap.Convert.XmlProcessor;
+import com.soaptojson.restsoap.Convert.XmlRequestFormat;
 import com.soaptojson.restsoap.Routes.SendToSoap;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,5 +58,22 @@ public class AppConfig
     public SendToSoap sendToSoap()
     {
         return new SendToSoap();
+    }
+
+    @Bean
+    public JsonProcessorMapper jsonProcessorMapper()
+    {
+        return new JsonProcessorMapper();
+    }
+
+    @Bean
+    public JsonProcessorConverterXml jsonProcessorConverterXml()
+    {
+        return new JsonProcessorConverterXml();
+    }
+    @Bean(name = "XmlRequestFormat")
+    public XmlRequestFormat xmlRequestFormat()
+    {
+        return new XmlRequestFormat();
     }
 }

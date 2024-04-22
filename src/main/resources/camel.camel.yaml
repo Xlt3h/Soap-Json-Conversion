@@ -1,0 +1,93 @@
+# camel:
+#   routes:
+#     - id: xmlInRoute
+#       from: direct:xmlIn
+#       steps:
+#         - log: "${body}"
+#         - convertBodyTo: java.lang.String
+#         - bean: com.soaptojson.restsoap.Routes.SendToSoap?method=sendXmlToSoap
+#         - log: "this is the response ${body}"
+#         - process: com.soaptojson.restsoap.Convert.XmlProcessor
+#         - setHeader:
+#             exchange.CONTENT_TYPE: "application/json"
+#         - setBody: "${body}"
+#         - log: "soap to json ${body}"
+#       routeId: xmlInRoute
+#     - id: jsonInRoute
+#       from: direct:jsonIn
+#       steps:
+#         - process: com.soaptojson.restsoap.Routes.JsonProcessor
+#         - log: "${body}"
+#         - setHeader:
+#             exchange.HTTP_METHOD: "POST"
+#         - setHeader:
+#             exchange.CONTENT_TYPE: "text/xml; charset=UTF-8"
+#         - process: com.soaptojson.restsoap.Convert.JsonProcess
+#         - setBody: "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ser=\"http://superdev.io/student-service\">" +
+#                    "   <soapenv:Header/>" +
+#                    "   <soapenv:Body>" +
+#                    "      <ser:getStudentRequest>" +
+#                    "         <ser:id>${header.id}</ser:id>" +
+#                    "      </ser:getStudentRequest>" +
+#                    "   </soapenv:Body>" +
+#                    "</soapenv:Envelope>"
+#         - process: com.soaptojson.restsoap.Routes.RestProcessor
+#       routeId: jsonInRoute
+- rest:
+    post:
+    - path: "/api/xml"
+      to: "direct:xmlIn"
+- route:
+    id: "my-xml-route"
+    from:
+      uri: "direct:xmlIn"
+      steps:
+        - log : "${body}"
+        - convertBodyTo : java.lang.String
+        - bean : "com.soaptojson.restsoap.Routes.SendToSoap"
+        - log : "response body ${body}"
+        - process : 
+            ref : xmlRequest
+        - setHeaders:
+            headers:
+              - name: "Content-Type"
+                constant: "application/json"
+        - log: "soap to json ${body}"
+- rest:
+    post:
+    - path: "/api/json"
+      to: "direct:jsonIn"
+- route:
+    id: "my-json-route"
+    from:
+      uri: "direct:jsonIn"
+      steps:
+        - process : 
+            ref : jsonmapper
+        - log : "${body}"
+        - setHeaders:
+            headers:
+              - name: "HTTP-METHOD"
+                constant: "POST"
+              - name: "Content-Type"
+                constant: "text/xml; charset=UTF-8"
+        - process:
+            ref: jsonRequest
+        - to: "bean:XmlRequestFormat?method=xmlparser(${header.id})"
+        - log : "${body}"
+        - process:
+            ref: jsontoxml
+        - log : "${body}"
+
+- beans:
+   - name: xmlRequest
+     type: "com.soaptojson.restsoap.Convert.XmlProcessor"
+   - name: jsonRequest
+     type: "com.soaptojson.restsoap.Convert.JsonProcess"
+   - name: jsonmapper
+     type: "com.soaptojson.restsoap.Convert.JsonProcessorMapper"
+   - name: jsontoxml
+     type: "com.soaptojson.restsoap.Convert.JsonProcessorConverterXml"
+   - name: xmlparser
+     type: "com.soaptojson.restsoap.Convert.XmlRequestFormat"
+

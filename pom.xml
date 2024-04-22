@@ -50,6 +50,21 @@
     <version>20240303</version>
 </dependency>
 
+<!-- https://mvnrepository.com/artifact/org.apache.camel.springboot/camel-yaml-dsl-starter -->
+
+<dependency>
+    <groupId>org.apache.camel.springboot</groupId>
+    <artifactId>camel-yaml-dsl-starter</artifactId>
+    <version>4.5.0</version>
+</dependency>
+
+<!-- https://mvnrepository.com/artifact/org.apache.camel.springboot/camel-bean-starter -->
+<dependency>
+    <groupId>org.apache.camel.springboot</groupId>
+    <artifactId>camel-bean-starter</artifactId>
+    <version>4.5.0</version>
+</dependency>
+
 
 		<dependency>
 			<groupId>org.projectlombok</groupId>
